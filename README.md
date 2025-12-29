@@ -1,2 +1,2 @@
-# fastapiwallet
+# mywalletproject
 
