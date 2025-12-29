@@ -10,6 +10,6 @@ def top_currencies():
             "GROUP BY currency " \
             "ORDER BY count DESC " \
             "LIMIT 10;"
-        )).mappings()
+        )).mappings().all()
 
     return {"Самые популярные валюты": res}
