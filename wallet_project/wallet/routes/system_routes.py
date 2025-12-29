@@ -12,8 +12,5 @@ def top_currencies():
             "LIMIT 10;"
         )).mappings().all()
 
-    return {
-        "Самые популярные монеты":
-        {{"Количество": row["count"], "Валюта": row["currency"]} for row in res}
-    }
+    return res
 
