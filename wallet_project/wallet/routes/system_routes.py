@@ -6,9 +6,9 @@ from sqlalchemy import text
 def top_currencies():
     with engine.begin() as connection:
         res = connection.execute(text(
-            "SELECT currency FROM wallets " \
+            "SELECT COUNT(*) AS count, currency FROM wallets " \
             "GROUP BY currency " \
-            "ORDER BY COUNT(*) DESC " \
+            "ORDER BY count DESC " \
             "LIMIT 10;"
         )).mappings()
 
