@@ -2,7 +2,7 @@ from wallet.core.app import wallet_app
 from wallet.db.db_init import engine
 from sqlalchemy import text
 
-@wallet_app.get("/track_system/popularcurrencies")
+@wallet_app.get("/track_system/popularcurrencies", tags=["Данные системы"])
 def top_currencies():
     with engine.begin() as connection:
         res = connection.execute(text(
