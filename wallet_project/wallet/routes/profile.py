@@ -38,9 +38,8 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
        
     if not db_pass or not verify_password(form_data.password, db_pass):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
             detail="Неправильное имя пользователя или пароль",
-            headers={"WWW-Authenticate": "Bearer"},
         )
 
     access_token = create_access_token({"sub": form_data.username})

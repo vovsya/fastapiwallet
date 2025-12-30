@@ -26,9 +26,8 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
     credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Не удалось проверить учетные данные",
-        headers={"WWW-Authenticate": "Bearer"},
+        status_code=401,
+        detail="Войдите в аккаунт"
     )
 
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
