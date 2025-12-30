@@ -59,7 +59,7 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
 @wallet_app.delete("/profile/delete", tags=["Профиль"])
 def delete_profile(
     current_user: str = Depends(get_current_user),
-    user_info: ProfileDeletion = Body(...)
+    user_info: ProfileDeletion = Body(..., description="Введите пароль 2 раза и введите 'ПОДТВЕРДИТЬ'")
     ):
 
     if user_info.confirm != "ПОДТВЕРДИТЬ":
