@@ -1,6 +1,6 @@
 from wallet.schemas.classes import UserData, Token
 from wallet.db.db_init import engine
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Form
 from wallet.core.app import wallet_app
 from sqlalchemy import text
 from wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user, OAuth2PasswordRequestForm
