@@ -3,7 +3,7 @@ from wallet.db.db_init import engine
 from fastapi import Depends, HTTPException, status, Body
 from wallet.core.app import wallet_app
 from sqlalchemy import text
-from wallet.security.auth import pwd_context, verify_password, password_hash, create_access_token, get_current_user, OAuth2PasswordRequestForm
+from wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user, OAuth2PasswordRequestForm
 
 
 @wallet_app.post("/register", tags=["Профиль"])
