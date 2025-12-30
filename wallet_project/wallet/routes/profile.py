@@ -58,8 +58,8 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
 
 @wallet_app.delete("/profile/delete", tags=["Профиль"])
 def delete_profile(
-    password1: str = Form(..., description="Введите пароль"),
-    password2: str = Form(..., description="Повторите пароль"),
+    password1: str = Form(..., description="Введите пароль", json_schema_extra={"format": "password"}),
+    password2: str = Form(..., description="Повторите пароль", json_schema_extra={"format": "password"}),
     confirm: str = Form(..., description="Введите 'ПОДТВЕРДИТЬ'"),
     current_user: str = Depends(get_current_user)
     ):
