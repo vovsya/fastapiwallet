@@ -31,20 +31,10 @@ def create_user(userinfo: UserData):
 @wallet_app.post("/login", response_model=Token, tags=["Профиль"])
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     with engine.begin() as connection:
-        exists = connection.execute(text(
-            """
-            SELECT 1 FROM users WHERE username = :name
-            """
-        ), {"name": form_data.username}).scalar_one_or_none()
-    
-    if exists == None:
-        raise HTTPException(status_code=401, detail="Неверный логин или пароль")
-
-    with engine.begin() as connection:
         db_pass = connection.execute(text(
             "SELECT secretpass FROM users WHERE username = :name"
         ), {"name": form_data.username}).scalar_one_or_none()
-    
+       
     if not db_pass or not verify_password(form_data.password, db_pass):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
