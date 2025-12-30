@@ -1,6 +1,6 @@
-from wallet.schemas.classes import UserData, Token, ProfileDeletion
+from wallet.schemas.classes import UserData, Token
 from wallet.db.db_init import engine
-from fastapi import Depends, HTTPException, status, Body
+from fastapi import Depends, HTTPException, status
 from wallet.core.app import wallet_app
 from sqlalchemy import text
 from wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user, OAuth2PasswordRequestForm
@@ -58,14 +58,16 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
 
 @wallet_app.delete("/profile/delete", tags=["Профиль"])
 def delete_profile(
-    current_user: str = Depends(get_current_user),
-    user_info: ProfileDeletion = Body(..., description="Введите пароль 2 раза и введите 'ПОДТВЕРДИТЬ'")
+    password1: str = Form(..., description="Введите пароль"),
+    password2: str = Form(..., description="Повторите пароль"),
+    confirm: str = Form(..., description="Введите 'ПОДТВЕРДИТЬ'"),
+    current_user: str = Depends(get_current_user)
     ):
 
-    if user_info.confirm != "ПОДТВЕРДИТЬ":
+    if confirm != "ПОДТВЕРДИТЬ":
         raise HTTPException(status_code=401, detail="Требуется подтверждение")
     
-    if user_info.password1 != user_info.password2:
+    if password1 != password2:
         raise HTTPException(status_code=401, detail="Пароли не совпадают")
     
     with engine.begin() as connection:
@@ -76,7 +78,7 @@ def delete_profile(
             """
         ), {"username": current_user}).scalar_one_or_none()
 
-        if not db_password or not verify_password(user_info.password1.get_secret_value(), db_password):
+        if not db_password or not verify_password(password1, db_password):
             raise HTTPException(status_code=401, detail="Неверный пароль")
     
         connection.execute(text(
