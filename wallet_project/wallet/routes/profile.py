@@ -63,10 +63,10 @@ def delete_profile(
     ):
 
     if user_info.confirm != "ПОДТВЕРДИТЬ":
-        raise HTTPException(status_code=400, detail="Требуется подтверждение")
+        raise HTTPException(status_code=401, detail="Требуется подтверждение")
     
     if user_info.password1 != user_info.password2:
-        raise HTTPException(status_code=400, detail="Пароли не совпадают")
+        raise HTTPException(status_code=401, detail="Пароли не совпадают")
     
     with engine.begin() as connection:
         db_password = connection.execute(text(
@@ -77,7 +77,7 @@ def delete_profile(
         ), {"username": current_user}).scalar_one_or_none()
 
         if not db_password or not verify_password(user_info.password1, db_password):
-            raise HTTPException(status_code=400, detail="Неверный пароль")
+            raise HTTPException(status_code=401, detail="Неверный пароль")
     
         connection.execute(text(
             """
