@@ -76,7 +76,7 @@ def delete_profile(
             """
         ), {"username": current_user}).scalar_one_or_none()
 
-        if not db_password or not verify_password(user_info.password1, db_password):
+        if not db_password or not verify_password(user_info.password1.get_secret_value(), db_password):
             raise HTTPException(status_code=401, detail="Неверный пароль")
     
         connection.execute(text(
