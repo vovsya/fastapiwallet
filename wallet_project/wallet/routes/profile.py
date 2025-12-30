@@ -1,4 +1,4 @@
-from wallet.schemas.classes import UserData, Token
+from wallet.schemas.classes import UserData, Token, ProfileDeletion
 from wallet.db.db_init import engine
 from fastapi import Depends, HTTPException, status, Body
 from wallet.core.app import wallet_app
@@ -55,4 +55,44 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
         ), {"current_user": current_user}).mappings().all()
     
     return {"данные пользователя": data}
+
+@wallet_app.delete("/profile/delete", tags=["Профиль"])
+def delete_profile(
+    current_user: str = Depends(get_current_user),
+    user_info: ProfileDeletion = Body(...)
+    ):
+
+    if user_info.confirm != "ПОДТВЕРДИТЬ":
+        raise HTTPException(status_code=400, detail="Требуется подтверждение")
+    
+    if user_info.password1 != user_info.password2:
+        raise HTTPException(status_code=400, detail="Пароли не совпадают")
+    
+    with engine.begin() as connection:
+        db_password = connection.execute(text(
+            """
+            SELECT secretpass FROM users
+            WHERE username = :username
+            """
+        ), {"username": current_user}).scalar_one_or_none()
+
+        if not db_password or not verify_password(user_info.password1, db_password):
+            raise HTTPException(status_code=400, detail="Неверный пароль")
+    
+        connection.execute(text(
+            """
+            DELETE FROM wallets
+            WHERE user_id = (SELECT id FROM users WHERE username = :username);
+            """
+        ), {"username": current_user})
+
+        connection.execute(text(
+            """
+            DELETE FROM users
+            WHERE username = :username;
+            """
+        ), {"username": current_user})
+
+    return {"Аккаунт": "Удален"}
+
 
