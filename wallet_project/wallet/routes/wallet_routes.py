@@ -30,9 +30,11 @@ def add_currency(currency_name: str = Body(desciption="Укажите назва
     with engine.begin() as connection:
         exists = connection.execute(text(
             """
-            SELECT 1 FROM wallets WHERE (SELECT DISTINCT username FROM users INNER JOIN wallets ON
-            users.id = wallets.user_id WHERE username = :current_user) = :current_user
-            AND (currency = :currency_name OR ticker = :ticker)
+            SELECT 1 FROM users
+            INNER JOIN wallets ON users.id = wallets.user_id
+            WHERE username = :current_user AND
+            (currency = :currency_name OR ticker = :ticker)
+            LIMIT 1
             """
         ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker}).scalar_one_or_none()
     
