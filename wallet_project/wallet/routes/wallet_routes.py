@@ -95,7 +95,7 @@ def delete_currency(ticker: str = Body(desciption="Укажите тикер"), 
     
     return {"Валюта": "удалена"}
 
-@wallet_app.put("/mywallet/defaultvalues", description="Обнулить баланс валют")
+@wallet_app.put("/mywallet/defaultvalues", description="Обнулить баланс валют", tags=["Кошелёк"])
 def default_values(current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         connection.execute(text(
@@ -108,7 +108,7 @@ def default_values(current_user: str = Depends(get_current_user)):
     
     return {"Баланс": "Обнулен"}
 
-@wallet_app.delete("/mywallet/deletewallet", description="Очистить кошелек")
+@wallet_app.delete("/mywallet/deletewallet", description="Очистить кошелек", tags=["Кошелёк"])
 def delete_wallet(current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         connection.execute(text(
