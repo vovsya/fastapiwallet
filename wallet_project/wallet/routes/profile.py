@@ -87,7 +87,7 @@ def change_name(
         except IntegrityError as e:
             raise HTTPException(status_code=409, detail="Имя занято")
     
-    return {"Имя пользователя": "изменено"}
+    return {"Имя пользователя изменено": "Перелогиньтесь для доступа к кошельку]"}
 
 @wallet_app.delete("/profile/delete", tags=["Профиль"])
 def delete_profile(
