@@ -1,6 +1,11 @@
 from wallet.core.app import wallet_app
 from wallet.db.db_init import engine
 from sqlalchemy import text
+from fastapi.responses import RedirectResponse
+
+@wallet_app.get("/")
+def root():
+    return RedirectResponse(url="/docs")
 
 @wallet_app.get("/track_system/popularcurrencies", tags=["Данные системы"])
 def top_currencies():
