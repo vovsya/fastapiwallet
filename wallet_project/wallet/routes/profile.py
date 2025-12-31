@@ -1,8 +1,9 @@
 from wallet.schemas.classes import UserData, Token
 from wallet.db.db_init import engine
-from fastapi import Depends, HTTPException, status, Form
+from fastapi import Depends, HTTPException, Form
 from wallet.core.app import wallet_app
 from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
 from wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -55,6 +56,38 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
         ), {"current_user": current_user}).mappings().all()
     
     return {"данные пользователя": data}
+
+@wallet_app.put("/profile/changename", tags=["Профиль"])
+def change_name(
+    password: str = Form(..., description="Введите пароль", json_schema_extra={"format": "password"}),
+    new_username: str = Form(..., description="Новое имя:"),
+    current_user: str = Depends(get_current_user)
+):
+    with engine.begin() as connection:
+
+        db_password = connection.execute(text(
+            """
+            SELECT secretpass FROM users
+            WHERE username = :username
+            """
+        ), {"username": current_user}).scalar_one_or_none()
+
+        if db_password is None or not verify_password(password, db_password):
+            raise HTTPException(status_code=403, detail="Пользователь не существует или неверный паролль")
+
+        try:
+            connection.execute(text(
+                """
+                UPDATE users
+                SET username = :new_username
+                WHERE username = :username
+                """
+            ), {"new_username": new_username, "username": current_user})
+
+        except IntegrityError as e:
+            raise HTTPException(status_code=409, detail="Имя занято")
+    
+    return {"Имя пользователя": "изменено"}
 
 @wallet_app.delete("/profile/delete", tags=["Профиль"])
 def delete_profile(
