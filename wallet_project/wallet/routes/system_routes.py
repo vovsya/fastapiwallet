@@ -3,7 +3,7 @@ from wallet.db.db_init import engine
 from sqlalchemy import text
 from fastapi.responses import RedirectResponse
 
-@wallet_app.get("/")
+@wallet_app.get("/", tags=["Корень"])
 def root():
     return RedirectResponse(url="/docs")
 
