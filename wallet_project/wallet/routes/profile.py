@@ -57,7 +57,7 @@ def get_profile_info(current_user: str = Depends(get_current_user)):
     
     return {"данные пользователя": data}
 
-@wallet_app.put("/profile/changename", tags=["Профиль"])
+@wallet_app.patch("/profile/changename", tags=["Профиль"])
 def change_name(
     password: str = Form(..., description="Введите пароль", json_schema_extra={"format": "password"}),
     new_username: str = Form(..., description="Новое имя:"),

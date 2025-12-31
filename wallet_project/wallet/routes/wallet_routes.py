@@ -56,7 +56,7 @@ def add_currency(currency_name: str = Body(desciption="Укажите назва
         ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker})
     return {"добавление": "совершено"}
 
-@wallet_app.put("/mywallet/changevalue", tags=["Кошелёк"])
+@wallet_app.patch("/mywallet/changevalue", tags=["Кошелёк"])
 def change_value(ticker: str = Body(description="Укажите тикер"), change: Decimal = Body(desciption="Укажите сумму"), current_user: str = Depends(get_current_user), choice: ValueChange = Query(..., description="Выберите действие")):
     if choice == ValueChange.MINUS:
         change *= -1
