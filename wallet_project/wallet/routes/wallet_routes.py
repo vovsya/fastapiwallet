@@ -94,3 +94,28 @@ def delete_currency(ticker: str = Body(desciption="Укажите тикер"), 
         raise HTTPException(status_code=404, detail="Монеты нет в кошельке")
     
     return {"Валюта": "удалена"}
+
+@wallet_app.put("/mywallet/defaultvalues", description="Обнулить баланс валют")
+def default_values(current_user: str = Depends(get_current_user)):
+    with engine.begin() as connection:
+        connection.execute(text(
+            """
+            UPDATE wallets
+            SET value = 0
+            WHERE user_id = (SELECT id FROM users WHERE username = :username)
+            """
+        ), {"username": current_user})
+    
+    return {"Баланс": "Обнулен"}
+
+@wallet_app.delete("/mywallet/deletewallet", description="Очистить кошелек")
+def delete_wallet(current_user: str = Depends(get_current_user)):
+    with engine.begin() as connection:
+        connection.execute(text(
+            """
+            DELETE FROM wallets
+            WHERE user_id = (SELECT id FROM users WHERE username = :username)
+            """
+        ), {"username": current_user})
+    
+    return {"Кошелек": "очищен"}
