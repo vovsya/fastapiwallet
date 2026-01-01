@@ -1,1 +1,29 @@
-bla
+Приложение кошелька на FastAPI + PostgreSQL (SQLAlchemy Core + Alembic) (Деплой на render.com)
+
+https://fastapiwallet.onrender.com
+
+Стэк:
+
+Python3 + FastAPI
+
+    (SQLAlchemy Core (сырые запросы) + Миграции Alembic)
+
+PostgreSQL 18
+
+    (БД хостится на render.com)
+
+Деплой на сервере render.com
+
+CRUD - операции для профиля пользователей
+
+CRUD - операции для кошелька
+
+Авторизация через JWT токены
+
+Разделение приложения на модули
+
+Поддержка миграций Alembic на SQLAlchemy
+
+Список зависимостей
+
+Переменные окружения
