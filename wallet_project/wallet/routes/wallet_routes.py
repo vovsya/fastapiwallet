@@ -80,7 +80,7 @@ def change_value(ticker: str = Body(description="Укажите тикер"), ch
     else:
         return {"Валюта": "убрана"}
 
-@wallet_app.delete("/mywallet/deletecurrency", tags=["Кошелёк"])
+@wallet_app.delete("/mywallet/deletecurrency", description="Удалить валюту из кошелька" tags=["Кошелёк"])
 def delete_currency(ticker: str = Body(desciption="Укажите тикер"), current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         exists = connection.execute(text(
