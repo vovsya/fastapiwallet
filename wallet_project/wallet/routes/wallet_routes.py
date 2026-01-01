@@ -25,7 +25,7 @@ def info(current_user: str = Depends(get_current_user)):
 
     return {"Ваш аккаунт": person, "Ваш кошелёк": money}
 
-@wallet_app.post("/mywallet/addcurrency", tags=["Кошелёк"])
+@wallet_app.post("/mywallet/addcurrency", description="Добавить валюту", tags=["Кошелёк"])
 def add_currency(currency_name: str = Body(desciption="Укажите название валюты"), ticker: str = Body(description="Укажите тикер валюты"), current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         exists = connection.execute(text(
@@ -56,7 +56,7 @@ def add_currency(currency_name: str = Body(desciption="Укажите назва
         ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker})
     return {"добавление": "совершено"}
 
-@wallet_app.patch("/mywallet/changevalue", tags=["Кошелёк"])
+@wallet_app.patch("/mywallet/changevalue", description="Изменить баланс валюты", tags=["Кошелёк"])
 def change_value(ticker: str = Body(description="Укажите тикер"), change: Decimal = Body(desciption="Укажите сумму"), current_user: str = Depends(get_current_user), choice: ValueChange = Query(..., description="Выберите действие")):
     if choice == ValueChange.MINUS:
         change *= -1
@@ -80,7 +80,7 @@ def change_value(ticker: str = Body(description="Укажите тикер"), ch
     else:
         return {"Валюта": "убрана"}
 
-@wallet_app.delete("/mywallet/deletecurrency", description="Удалить валюту из кошелька" tags=["Кошелёк"])
+@wallet_app.delete("/mywallet/deletecurrency", description="Удалить валюту из кошелька", tags=["Кошелёк"])
 def delete_currency(ticker: str = Body(desciption="Укажите тикер"), current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         exists = connection.execute(text(
