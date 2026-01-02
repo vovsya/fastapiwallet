@@ -26,21 +26,7 @@ def info(current_user: str = Depends(get_current_user)):
     return {"Ваш аккаунт": person, "Ваш кошелёк": money}
 
 @wallet_app.post("/mywallet/addcurrency", description="Добавить валюту", tags=["Кошелёк"])
-def add_currency(currency_name: str = Body(desciption="Укажите название валюты"), ticker: str = Body(description="Укажите тикер валюты"), current_user: str = Depends(get_current_user)):
-    with engine.begin() as connection:
-        exists = connection.execute(text(
-            """
-            SELECT 1 FROM users
-            INNER JOIN wallets ON users.id = wallets.user_id
-            WHERE username = :current_user AND
-            (currency = :currency_name OR ticker = :ticker)
-            LIMIT 1
-            """
-        ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker}).scalar_one_or_none()
-    
-    if exists != None:
-        raise HTTPException(status_code=409, detail="Валюта уже добавлена или тикер занят.")
-
+def add_currency(currency_name: str = Body(description="Укажите название валюты"), ticker: str = Body(description="Укажите тикер валюты"), current_user: str = Depends(get_current_user)):
     with engine.begin() as connection:
         creation = connection.execute(text(
             """
@@ -53,7 +39,7 @@ def add_currency(currency_name: str = Body(desciption="Укажите назва
         ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker}).scalar_one_or_none()
 
         if creation is None:
-            raise HTTPException(status_code=404, detail="Аккаунт не найден")
+            raise HTTPException(status_code=409, detail="Валюта не может быть добавлена")
     return {"добавление": "совершено"}
 
 @wallet_app.patch("/mywallet/changevalue", description="Изменить баланс валюты", tags=["Кошелёк"])
