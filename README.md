@@ -6,11 +6,11 @@ https://fastapiwallet.onrender.com
 
 Python3 + FastAPI
 
-    (SQLAlchemy Core (сырые запросы) + Миграции Alembic)
+(SQLAlchemy Core (сырые запросы) + Миграции Alembic)
 
 PostgreSQL 18
 
-    (БД хостится на render.com)
+render.com (деплой приложения и БД)
 
 Деплой на сервере render.com
 
