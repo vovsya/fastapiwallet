@@ -4,13 +4,13 @@ https://fastapiwallet.onrender.com
 
 Стэк:
   
-  Python3 + FastAPI
-  
-  (SQLAlchemy Core (сырые запросы) + Миграции Alembic)
-  
-  PostgreSQL 18
-  
-  render.com (деплой приложения и БД)
+    Python3 + FastAPI
+    
+    (SQLAlchemy Core (сырые запросы) + Миграции Alembic)
+    
+    PostgreSQL 18
+    
+    render.com (деплой приложения и БД)
 
 Деплой на сервере render.com
 
