@@ -45,15 +45,15 @@ def add_currency(currency_name: str = Body(desciption="Укажите назва
         creation = connection.execute(text(
             """
             INSERT INTO wallets(user_id, currency, ticker, value)
-            VALUES(
-                (SELECT id FROM users WHERE username = :current_user),
-                :currency_name,
-                :ticker,
-                0
-            )
-            ON CONFLICT (user_id, currency) DO NOTHING;  
+            SELECT id, :currency_name, :ticker, 0
+            FROM users WHERE username = :current_user
+            ON CONFLICT (user_id, currency) DO NOTHING
+            RETURNING user_id;  
             """
-        ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker})
+        ), {"current_user": current_user, "currency_name": currency_name, "ticker": ticker}).scalar_one_or_none()
+
+        if creation is None:
+            raise HTTPException(status_code=404, detail="Аккаунт не найден")
     return {"добавление": "совершено"}
 
 @wallet_app.patch("/mywallet/changevalue", description="Изменить баланс валюты", tags=["Кошелёк"])
