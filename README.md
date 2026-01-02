@@ -3,16 +3,14 @@
 https://fastapiwallet.onrender.com
 
 Стэк:
-
-Python3 + FastAPI
-
+  
+    Python3 + FastAPI
+    
     (SQLAlchemy Core (сырые запросы) + Миграции Alembic)
-
-PostgreSQL 18
-
-    (БД хостится на render.com)
-
-Деплой на сервере render.com
+    
+    PostgreSQL 18
+    
+    render.com (деплой приложения и БД)
 
 CRUD - операции для профиля пользователей
 
@@ -23,7 +21,3 @@ CRUD - операции для кошелька
 Разделение приложения на модули
 
 Поддержка миграций Alembic на SQLAlchemy
-
-Список зависимостей
-
-Переменные окружения
