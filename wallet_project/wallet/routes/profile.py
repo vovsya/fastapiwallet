@@ -1,10 +1,10 @@
-from wallet.schemas.classes import UserData, Token
-from wallet.db.db_init import engine
+from wallet_project.wallet.schemas.classes import UserData, Token
+from wallet_project.wallet.db.db_init import engine
 from fastapi import Depends, HTTPException, Form
-from wallet.core.app import wallet_app
+from wallet_project.wallet.core.app import wallet_app
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
-from wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user
+from wallet_project.wallet.security.auth import pwd_context, verify_password, create_access_token, get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 
 

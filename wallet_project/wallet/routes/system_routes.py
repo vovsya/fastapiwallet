@@ -1,5 +1,5 @@
-from wallet.core.app import wallet_app
-from wallet.db.db_init import engine
+from wallet_project.wallet.core.app import wallet_app
+from wallet_project.wallet.db.db_init import engine
 from sqlalchemy import text
 from fastapi.responses import RedirectResponse
 
