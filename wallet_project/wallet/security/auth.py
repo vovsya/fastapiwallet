@@ -2,7 +2,7 @@ from fastapi.security import OAuth2PasswordBearer
 import jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, Depends
 import os
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
